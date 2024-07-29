@@ -40,11 +40,21 @@ const renderData = (data, searchTerm) => {
     <div class="container">
     ${hazards
       .map((entry) => {
-        const { hazardTypeRiskIndex } = entry[1];
+        const { hazardTypeRiskIndex, annualLoss } = entry[1];
         return `
       <div>
         <h3>${camelCaseToTitleCase(entry[0])}</h3>
-        <p>${hazardTypeRiskIndex.rating}</p>
+        <div>
+          <p style="font-weight: 400">${hazardTypeRiskIndex.rating}</p>
+        </div>
+        <div style="width: 100%">
+          <p>
+            <small>
+              <strong>historicLossRatioTotalRating:</strong> ${annualLoss.historicLossRatioTotalRating}<br>
+              <strong>rating:</strong>  ${annualLoss.rating}
+            </small>
+          </p>
+        </div>
       </div>`;
       })
       .join("")}
