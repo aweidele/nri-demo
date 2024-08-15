@@ -74,3 +74,27 @@ h3 {
   flex-wrap: wrap;
   align-items: center;
 }
+
+.report-inner {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.report-inner > div {
+  background-color: rgb(171, 198, 240);
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 20px;
+}
+
+.report-inner h3 {
+  width: 100%;
+}
+
+.report-inner * {
+  margin: 0;
+}

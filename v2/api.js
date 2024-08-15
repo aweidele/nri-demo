@@ -1,33 +1,16 @@
-//https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=1600+Pennsylvania+Ave+NW,+Washington,+DC+20500&outFields=Match_addr,Addr_type,location&f=json
-// const formWrapper = document.getElementById("form-wrapper");
-// const zipInput = document.getElementById("zip");
-// const submitButton = document.getElementById("submitButton");
-// const urlWrapper = document.querySelector(".url");
-
-// submitButton.addEventListener("click", (e) => {
-//   const address = zipInput.value;
-//   const endpoint = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=${encodeURIComponent(address)}&outFields=Match_addr,Addr_type,location&f=json`;
-//   urlWrapper.innerText = endpoint;
-//   urlWrapper.classList.remove("hidden");
-//   console.log(endpoint);
-// });
-
-/*
-https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&text=21228&maxSuggestions=6&countryCode=US&location={"spatialReference":{"wkid":102100},"x":-10801469.5,"y":4711105.5}
-https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&text=21228&maxSuggestions=6&countryCode=US&location={"spatialReference":{"wkid":102100},"x":1949898.8367559016,"y":4813488.5268678265}
-
-https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&text=21228&maxSuggestions=6&countryCode=US&location=%7B%22spatialReference%22%3A%7B%22wkid%22%3A102100%7D%2C%22x%22%3A-10801469.5%2C%22y%22%3A4711105.5%7D
-https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&text=21228&maxSuggestions=6&countryCode=US&location=%7B%22spatialReference%22%3A%7B%22wkid%22%3A102100%7D%2C%22x%22%3A1232374.8388078017%2C%22y%22%3A4683210.824311126%7D
-
-*/
+import { myFields } from "./fields.js";
 class addressLookup {
   constructor() {
     this.zipInput = document.getElementById("zip");
     this.submitButton = document.getElementById("submitButton");
     this.urlWrapper = document.querySelector(".url");
     this.riskResults = document.querySelector(".risk-results");
+    this.report = document.querySelector(".report");
+
+    // this.fields = ["STATE", "COUNTY", "COUNTYTYPE", "AVLN_RISKS", "AVLN_RISKR", "CFLD_RISKR", "CFLD_RISKS", "CWAV_RISKS", "CWAV_RISKR", "DRGT_RISKS", "DRGT_RISKR", "ERQK_RISKS", "ERQK_RISKR", "HAIL_RISKS", "HAIL_RISKR", "HWAV_RISKS", "HWAV_RISKR", "HRCN_RISKS", "HRCN_RISKR", "ISTM_RISKS", "ISTM_RISKR"];
 
     this.submitButton.addEventListener("click", this.submitZip.bind(this));
+    console.log("myFields", myFields);
   }
 
   submitZip(e) {
@@ -129,7 +112,7 @@ class addressLookup {
     console.log(attributes);
     console.log(fields);
 
-    const report = Object.keys(attributes).map((key) => {
+    const fullReport = Object.keys(attributes).map((key) => {
       const field = fields.find((element) => element.name === key);
       const row = {
         name: key,
@@ -139,7 +122,7 @@ class addressLookup {
       return row;
     });
 
-    report.forEach((element) => {
+    fullReport.forEach((element) => {
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${element.name}</td>
@@ -147,6 +130,41 @@ class addressLookup {
         <td>${element.value}</td>`;
       this.riskResults.appendChild(row);
     });
+
+    const report = myFields.map((key) => {
+      const scoreField = fields.find((element) => element.name === `${key}_RISKS`);
+      const ratingField = fields.find((element) => element.name === `${key}_RISKR`);
+
+      const title = scoreField.alias.split(" - ");
+
+      return {
+        title: title[0],
+        scoreField: { name: scoreField.name, alias: scoreField.alias, value: Math.round(attributes[`${key}_RISKS`] * 10) / 10 },
+        ratingField: { name: ratingField.name, alias: ratingField.alias, value: attributes[`${key}_RISKR`] },
+      };
+    });
+    console.log("report", report);
+
+    this.report.innerHTML = `
+      <h2>${attributes.COUNTY} ${attributes.COUNTYTYPE}, ${attributes.STATE}</h2>
+      <div class="report-inner">
+      ${report
+        .map(
+          (row) => `
+        <div>
+          <h3>${row.title}</h3>
+          <div>
+            <strong>Risk Rating:</strong> ${row.ratingField.value}
+          </div>
+          <div>
+            <strong>Risk Score:</strong> ${row.scoreField.value}
+          </div>
+        </div>
+        `
+        )
+        .join("")}
+        </div>
+    `;
   }
 }
 
