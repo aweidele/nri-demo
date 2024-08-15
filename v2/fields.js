@@ -1,1 +1,1 @@
-export const myFields = ["AVLN", "CFLD", "CWAV", "DRGT", "ERQK", "HAIL", "HWAV", "HRCN", "ISTM", "LNDS", "LTNG", "RFLD", "SWND", "TRND", "TSUN", "VLCN", "WFIR", "WNTW"];
+export const myFields = ["CFLD", "RFLD", "HRCN", "AVLN", "CWAV", "DRGT", "ERQK", "HAIL", "HWAV", "ISTM", "LNDS", "LTNG", "SWND", "TRND", "TSUN", "VLCN", "WFIR", "WNTW"];

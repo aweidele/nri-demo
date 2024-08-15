@@ -98,3 +98,10 @@ h3 {
 .report-inner * {
   margin: 0;
 }
+
+.zips {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  background-color: white;
+}

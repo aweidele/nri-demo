@@ -154,10 +154,10 @@ class addressLookup {
         <div>
           <h3>${row.title}</h3>
           <div>
-            <strong>Risk Rating:</strong> ${row.ratingField.value}
+            <strong>Risk Score:</strong> ${row.scoreField.value}
           </div>
           <div>
-            <strong>Risk Score:</strong> ${row.scoreField.value}
+            <strong>Risk Rating:</strong> ${row.ratingField.value}
           </div>
         </div>
         `
