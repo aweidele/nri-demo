@@ -4,7 +4,7 @@
 
 body {
   font-family: "Roboto", sans-serif;
-  font-weight: 100;
+  font-weight: 300;
   font-style: normal;
 }
 
@@ -13,7 +13,8 @@ button {
   font-family: "Roboto", sans-serif;
   font-weight: 400;
 }
-h1 {
+h1,
+h2 {
   text-align: center;
 }
 h1,
@@ -27,7 +28,7 @@ h3 {
 }
 
 #wrapper {
-  max-width: 900px;
+  max-width: 1100px;
   margin: auto;
   padding: 20px 30px;
 }
@@ -77,22 +78,48 @@ h3 {
 
 .report-inner {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 20px 10px;
+  background-color: rgb(0, 43, 71);
+  padding: 50px 20px;
+  /* box-shadow: 0px 10px 5px rgba(0, 0, 0, 0.3); */
+}
+
+@media screen and (min-width: 720px) {
+  .report-inner {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 980px) {
+  .report-inner {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .report-inner > div {
   background-color: rgb(171, 198, 240);
   border-radius: 10px;
-  padding: 10px;
+  padding: 16px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  row-gap: 20px;
+  font-size: 14px;
+}
+
+.report-inner > div.low {
+  background-color: #fff11a;
+}
+.report-inner > div.moderate {
+  background-color: #f47f2d;
+}
+.report-inner > div.high {
+  background-color: #e61538;
 }
 
 .report-inner h3 {
   width: 100%;
+  margin-bottom: 20px;
 }
 
 .report-inner * {
@@ -104,4 +131,46 @@ h3 {
   top: 50px;
   left: 0;
   background-color: white;
+}
+
+.url {
+  font-size: 14px;
+  max-width: 800px;
+  margin: 100px auto;
+  border: 1px solid #888;
+  padding: 20px;
+  overflow: auto;
+}
+
+.json-results input[type="checkbox"] {
+  /* position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0; */
+}
+
+.json-results label {
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 600;
+  color: rgb(0, 43, 71);
+}
+
+.json-results pre {
+  width: 100%;
+  background-color: rgb(0, 43, 71);
+  color: #ffffff;
+  padding: 20px;
+  font-size: 11px;
+  overflow: auto;
+  display: none;
+}
+
+.json-results input[type="checkbox"]:checked + pre {
+  display: block;
 }

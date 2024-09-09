@@ -3,17 +3,19 @@ class addressLookup {
   constructor() {
     this.zipInput = document.getElementById("zip");
     this.submitButton = document.getElementById("submitButton");
+    this.formWrapper = document.getElementById("form-wrapper");
     this.urlWrapper = document.querySelector(".url");
     this.riskResults = document.querySelector(".risk-results");
     this.report = document.querySelector(".report");
 
     // this.fields = ["STATE", "COUNTY", "COUNTYTYPE", "AVLN_RISKS", "AVLN_RISKR", "CFLD_RISKR", "CFLD_RISKS", "CWAV_RISKS", "CWAV_RISKR", "DRGT_RISKS", "DRGT_RISKR", "ERQK_RISKS", "ERQK_RISKR", "HAIL_RISKS", "HAIL_RISKR", "HWAV_RISKS", "HWAV_RISKR", "HRCN_RISKS", "HRCN_RISKR", "ISTM_RISKS", "ISTM_RISKR"];
 
-    this.submitButton.addEventListener("click", this.submitZip.bind(this));
+    this.formWrapper.addEventListener("submit", this.submitZip.bind(this));
     console.log("myFields", myFields);
   }
 
   submitZip(e) {
+    e.preventDefault();
     const zip = this.zipInput.value;
     const endpoint = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&text=${zip}&maxSuggestions=6&countryCode=US`;
     console.log(endpoint);
@@ -40,10 +42,16 @@ class addressLookup {
     console.log(zipResult.suggestions);
     if (zipResult.suggestions.length) {
       const { text, magicKey, isCollection } = zipResult.suggestions[0];
-      this.urlWrapper.innerHTML = `${this.urlWrapper.innerHTML}
+      this.urlWrapper.innerHTML = `
+        <h2>API Results</h2>  
+        ${this.urlWrapper.innerHTML}
         <p><strong>text: </strong>${text}</p>
         <p><strong>magicKey: </strong>${magicKey}</p>
         <p><strong>isCollection: </strong>${isCollection}</p>
+        <div class="json-results">
+          <label for="zip-suggestions">See full results</label><input type="checkbox" id="zip-suggestions">
+          <pre>${JSON.stringify(zipResult, null, 2)}</pre>
+        </div>
       `;
 
       const endpoint = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=${encodeURIComponent(text)}%2C%20USA&f=json&outSR=%7B%22latestWkid%22%3A3857%2C%22wkid%22%3A102100%7D&countryCode=US&magicKey=${magicKey}&maxLocations=3`;
@@ -151,7 +159,7 @@ class addressLookup {
       ${report
         .map(
           (row) => `
-        <div>
+        <div class="${this.riskClass(row.ratingField.value)}">
           <h3>${row.title}</h3>
           <div>
             <strong>Risk Score:</strong> ${row.scoreField.value}
@@ -165,6 +173,13 @@ class addressLookup {
         .join("")}
         </div>
     `;
+  }
+
+  riskClass(rating) {
+    if (rating.includes("Low")) return "low";
+    if (rating.includes("Moderate")) return "moderate";
+    if (rating.includes("High")) return "high";
+    return "low";
   }
 }
 
