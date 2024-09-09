@@ -86,6 +86,10 @@ class addressLookup {
       <p><strong>Location: </strong> ${location.x}, ${location.y}</p>
       <p><strong>WKID: </strong> ${wkid}</p>
       <p><strong>Latest WKID: </strong> ${latestWkid}</p>
+      <div class="json-results">
+        <label for="address-candidates">See full results</label><input type="checkbox" id="address-candidates">
+        <pre>${JSON.stringify(addressCandidates, null, 2)}</pre>
+      </div>
     `;
 
     const endpoint = `https://services.arcgis.com/XG15cJAlne2vxtgt/arcgis/rest/services/National_Risk_Index_Census_Tracts/FeatureServer/0/query?f=json&geometry=${encodeURIComponent(
@@ -112,6 +116,12 @@ class addressLookup {
   }
 
   riskRatingsResults(results) {
+    this.urlWrapper.innerHTML = `${this.urlWrapper.innerHTML}
+      <div class="json-results">
+        <label for="results">See full results</label><input type="checkbox" id="results">
+        <pre>${JSON.stringify(results, null, 2)}</pre>
+      </div>
+    `;
     this.riskResults.innerHTML = "";
     console.log(results);
     const { attributes } = results.features[0];
