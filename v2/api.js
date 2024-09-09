@@ -17,7 +17,7 @@ class addressLookup {
   submitZip(e) {
     e.preventDefault();
     const zip = this.zipInput.value;
-    const endpoint = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&text=${zip}&maxSuggestions=6&countryCode=US`;
+    const endpoint = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/suggest?f=json&text=${zip}&maxSuggestions=1&countryCode=US`;
     console.log(endpoint);
     this.urlWrapper.innerHTML = `<p><a href="${endpoint}" target="_blank">${endpoint}</a></p>`;
     this.urlWrapper.classList.remove("hidden");
@@ -54,7 +54,9 @@ class addressLookup {
         </div>
       `;
 
-      const endpoint = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=${encodeURIComponent(text)}%2C%20USA&f=json&outSR=%7B%22latestWkid%22%3A3857%2C%22wkid%22%3A102100%7D&countryCode=US&magicKey=${magicKey}&maxLocations=3`;
+      // const endpoint = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=${encodeURIComponent(text)}&f=json&outSR=%7B%22latestWkid%22%3A3857%2C%22wkid%22%3A102100%7D&countryCode=US&magicKey=${magicKey}&maxLocations=1`;
+      const endpoint = `https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=${encodeURIComponent(text)}&f=json&countryCode=US&magicKey=${magicKey}&maxLocations=1`;
+
       this.addressCandidates(endpoint);
     } else {
       this.urlWrapper.innerHTML = `No Results.`;
